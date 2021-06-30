@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .btn {
+    @apply p-3;
+    @apply rounded;
+    @apply bg-blue-600;
+    @apply hover:bg-blue-700;
+    @apply focus:outline-none;
+    @apply focus:ring-2;
+    @apply focus:ring-blue-600;
+    @apply focus:ring-opacity-50;
+    color: white;
+  }
+
+  .input {
+    display: block;
+    @apply rounded;
+    @apply border-solid;
+    @apply border-gray-200;
+    @apply bg-gray-200;
+  }
+}
+
+.fake-radio {
+  height: 13px;
+  width: 13px;
+  border: 0.5px solid;
+  border-radius: 50%;
+}
+
+.fake-table {
+  display: table;
+}
+
+.fake-table-row {
+  display: table-row;
+}
+
+.fake-table-row > div {
+  display: table-cell;
+  padding: 0.15rem;
+  vertical-align: middle;
+  border-radius: 4px;
+  @apply bg-gray-200;
+  margin-bottom: 3px;
+}

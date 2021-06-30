@@ -1,0 +1,294 @@
+---
+title: The basics - Role, Name, and State
+description: It's the principles. What more do I need to say?
+---
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+
+In order for users of assistive technology to be able to interact with a web page, 
+we as developers must write semantically descriptive html. How do you know if your code is descriptive enough?
+
+
+> All interactice user interface components (buttons, links, inputs, etc...) must have an accessible name and role.
+
+
+<br/>
+
+## Role: Where does it come from?
+The Role describes what what a component <em>is</em> and what functionality a user can expect from it. The role is computed from a semantic HTML tag or the `role` attribute
+
+
+
+<strong>Example:</strong>
+
+```jsx live=true
+render (
+  <div className="flex justify-evenly">
+    {/* Has the role "radio"  */}
+    <input type="radio" />
+
+    {/* Does not have a role :( */}
+    <div 
+      className="fake-radio" 
+      onClick={() => alert('this radio is a lie')}
+      //you can do this, but in reality this still isn't valid
+      //role="radio"
+    ></div>
+  </div>
+)
+```
+
+<div className="py-10"/>
+
+## Name: What is an accessible name?
+The Name provides context to the user so they know <em>which</em> component they are interacting with and what behavior it's related to.
+
+
+### Some elements get their name from their content
+
+```jsx live=true
+render (
+  <div className="flex justify-evenly">
+    {/* No Accessible name :(  */}
+    <button className="btn">
+      <svg focusable="false" data-prefix="fas" data-icon="search" className="svg-inline--fa fa-search fa-w-16 fa-2x " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg>
+    </button>
+
+    {/* Has the name "Search" :)  */}
+    <button className="btn">Search</button>
+  </div>
+);
+```
+
+<div className="py-5"/>
+
+
+### Some elements get their name from another HTML element
+
+```jsx live=true
+render(() => (
+  <fieldset className="flex justify-center">
+    <legend>Do these radios have names?</legend>
+
+    <label className="mr-5"> 
+      <input type="radio" name="scope"/>
+      Yes!
+    </label>
+
+    <input id="second-radio" type="radio" name="scope"/>
+    <label htmlFor="second-radio" className="mr-5"> 
+      Absolutely!
+    </label>
+
+    <input type="radio" name="scope"/>
+    <label > 
+      Nope
+    </label>
+  </fieldset>
+))
+```
+
+<div className="py-5"/>
+
+### Accessible names are particularly important in forms and complex components
+
+```jsx live=true
+render(() => (
+  <div className="flex justify-evenly">
+    <form aria-label="Form with correct naming">
+      <label className="block">
+        Name
+        <input type="text" className="input"/>
+      </label>
+
+      <label className="block">
+        Your email address
+        <input type="email" className="input"/>
+      </label>
+
+      <label className="block">
+        Password
+        <input type="password" className="input"/>
+      </label>
+
+      <label className="block">
+        What's your favorite color
+        <input type="color" className="input"/>
+      </label>
+    </form>
+
+    {/* This form does not have correct naming */}
+    {/* Demo note: show what happens with ID clashes */}
+    <div>
+      <label className="block">
+        Name
+      </label>
+      <input type="text" className="input"/>
+
+      <label className="block">
+        Your email address
+      </label>
+      <input type="email" className="input"/>
+
+      <label className="block">
+        Password
+      </label>
+      <input type="password" className="input"/>
+
+      <label className="block">
+        What's your favorite color
+      </label>
+      <input type="color" className="input"/>
+    </div>
+  </div>
+))
+```
+<br/> 
+
+#### Another example: tables
+```jsx live=true
+render(() => (
+  <div className="flex justify-evenly">
+    <table border="1">
+      <caption>
+        Shelly's Daughters
+      </caption>
+      <tbody>
+        <tr>
+          <td>{' '}</td>
+          <th id="name">Name</th>
+          <th id="age">Age</th>
+          <th id="birthday">Birthday</th>
+        </tr>
+        <tr>
+          <th rowSpan="2" id="birth">by birth</th>
+          <th id="jackie">Jackie</th>
+          <td headers="birth jackie age">5</td>
+          <td headers="birth jackie birthday">April 5</td>
+        </tr>
+        <tr>
+          <th id="beth">Beth</th>
+          <td headers="birth beth age">8</td>
+          <td headers="birth beth birthday">January 14</td>
+        </tr>
+        <tr>
+          <th id="step">by marriage</th>
+          <th id="jenny">Jenny</th>
+          <td headers="step jenny age">12</td>
+          <td headers="step jenny birthday">Feb 12</td>
+        </tr>
+      </tbody>
+    </table>
+    <div className="fake-table">
+      <div className="block whitespace-nowrap">Shelly's Daughters</div>
+      <div className="fake-table-row">
+        <div>{' '}</div>
+        <div className="font-bold">Name</div>
+        <div className="font-bold">Age</div>
+        <div className="font-bold">Birthday</div>
+      </div>
+      <div className="fake-table-row">
+        <div className="font-bold">by birth</div>
+        <div>Jackie</div>
+        <div>5</div>
+        <div>April 5</div>
+      </div>
+      <div className="fake-table-row">
+        <div>{' '}</div>
+        <div>Beth</div>
+        <div>8</div>
+        <div>January 14</div>
+      </div>
+      <div className="fake-table-row">
+        <div className="font-bold">by marriage</div>
+        <div>Jenny</div>
+        <div>12</div>
+        <div>Feb 12</div>
+      </div>
+    </div>
+  </div>
+  )
+)
+```
+
+<div className="py-10"/>
+
+
+## State?
+
+The State of an element describes what it is currently doing, if it can do things. 
+Implicitly, it also often describes what else it can do. For example: Is it selected? Is it loading?
+
+<div className="py-5"/>
+
+### Some elements expose their state natively
+
+```jsx live=true
+render(() => (
+  <details>
+    <summary>Show more details</summary>
+    Super secret hidden details
+
+    <label className="block">
+      <input type="checkbox" className="mr-1"/>
+      Accept terms and conditions
+    </label>
+  </details>
+))
+```
+
+<div className="py-5"/>
+
+### Some elements need additional aria attributes to explain the current state
+
+```jsx live=true scope=
+const ExpandingButton = () => {
+  const [ hideContent, setShowContent ] = React.useState(true)
+
+  return (
+    <>
+      <button 
+        // aria-expanded={!hideContent}
+        className="btn" 
+        onClick={() => setShowContent(!hideContent)}
+      >
+        Show more details
+      </button>
+      <div className={hideContent ? "hidden" : ""}>Hidden Content</div>
+    </>
+  )
+}
+render(<ExpandingButton />)
+```
+
+<div className="py-5"/>
+
+### Live State Updates
+
+```jsx live=true
+const LiveRegions = () => {
+  const [ message, setMessage ] = React.useState()
+  const [ messagePrefix, setMessagePrefix ] = React.useState()
+
+  const updateLive = (e) => {
+    var today = new Date();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds(); 
+    setMessage(time)
+    setMessagePrefix('The current time is: ')
+  }
+  
+  return (
+    <>
+      <button className="btn" onClick={updateLive}>
+        Update me on the current time
+      </button>
+      <div 
+        // aria-live="polite"
+        // aria-atomic="true"
+      >{messagePrefix}{message}</div>
+    </>
+  )
+}
+render(<LiveRegions />)
+```

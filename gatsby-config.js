@@ -48,5 +48,7 @@ module.exports = {
       },
     },
     `gatsby-plugin-offline`,
+    `gatsby-plugin-fontawesome-css`,
+    `gatsby-plugin-postcss`
   ],
 };
